@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TelegrammBotApi", "TelegrammBotApi\TelegrammBotApi.csproj", "{12DFA1E2-A3CE-4377-B27C-2D4CC9D1F5BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TelegrammBotApi", "TelegrammBotApi\TelegrammBotApi.csproj", "{12DFA1E2-A3CE-4377-B27C-2D4CC9D1F5BC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{09993359-1C05-4944-99E1-D50287545A4B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleTest", "Tests\ConsoleTest\ConsoleTest.csproj", "{59623076-B5B6-4D46-BB56-B2214533017E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +19,16 @@ Global
 		{12DFA1E2-A3CE-4377-B27C-2D4CC9D1F5BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12DFA1E2-A3CE-4377-B27C-2D4CC9D1F5BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12DFA1E2-A3CE-4377-B27C-2D4CC9D1F5BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59623076-B5B6-4D46-BB56-B2214533017E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59623076-B5B6-4D46-BB56-B2214533017E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59623076-B5B6-4D46-BB56-B2214533017E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59623076-B5B6-4D46-BB56-B2214533017E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{59623076-B5B6-4D46-BB56-B2214533017E} = {09993359-1C05-4944-99E1-D50287545A4B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {83440BC8-0001-4AF4-87D5-E270C66B22B3}
