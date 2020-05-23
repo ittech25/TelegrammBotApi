@@ -1,11 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Net;
-using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Linq;
 
 namespace TelegrammBotApi
 {
@@ -58,29 +55,8 @@ namespace TelegrammBotApi
                 Console.WriteLine(res);
                 Console.WriteLine();
 
-
+            //Серилизация объекта
             JsonMessages.Finish MessageNew = JsonConvert.DeserializeObject<JsonMessages.Finish>(res.ToString());
-
-            //dynamic MessageNew = JObject.Parse(res.ToString());
-
-            /*
-            Console.WriteLine(json.ok.ToString());
-            Console.WriteLine();
-            //Console.WriteLine(json.result);
-
-            int checkResult = json.result.ToString().Length;
-            if (checkResult < 3)
-            {
-                Console.WriteLine("Результат пустой!");
-                return;
-            }
-            Console.WriteLine("Результат ХОРООШИЙ");
-            Console.WriteLine(json.result[0].update_id);
-
-            */
-
-           
-            
 
             if (!MessageNew.ok || MessageNew.result.Length == 0) return;
 
@@ -97,14 +73,17 @@ namespace TelegrammBotApi
              */
             foreach (var el in MessageNew.result)
             {
+                //Получаем порядковый номер сообщения
                 countUpdateId = el.update_id;
 
+                //Проверка на получение текстового сообщения или кнопочного меню
                 if (el.message != null)
                 {
                     Console.WriteLine("Обработка сообщения 1 способом");
                     new Messages().ProcessMessage(el.message.chat.id.ToString(), el.message.text);
-                }    
+                }
 
+                //Проверка на получение сообщения от Inline кнопок
                 if (el.callback_query != null)
                 {
                     Console.WriteLine("Обработка INLINE сообщений - 2 способ");

@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace TelegrammBotApi
 {
+    /// <summary>
+    /// Класс для создания кнопок
+    /// </summary>
     class Buttons
     {
-
+        #region Процесс создания Inline кнопок
         /// <summary>
         /// Этот класс представляет встроенную клавиатуру, которая появляется под соответствующим сообщением.
         /// </summary>
@@ -83,6 +84,7 @@ namespace TelegrammBotApi
             }
 
         }
+        #endregion
 
-    }
-}
+    }//class Buttons
+}//namespace TelegrammBotApi

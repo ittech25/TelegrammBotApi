@@ -1,10 +1,6 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Net.Http;
 using System.Text;
-using TelegrammBotApi;
-using static TelegrammBotApi.Buttons;
 
 namespace TelegrammBotApi
 {
@@ -13,6 +9,7 @@ namespace TelegrammBotApi
     /// </summary>
     internal class Messages
     {
+        #region Обработка текстового сообщения
         /// <summary>
         /// Обработка входящих сообщений
         /// </summary>
@@ -28,7 +25,8 @@ namespace TelegrammBotApi
                     break;
 
                 case @"/menu":
-                    InlineMenu(ChatId);
+                    string replyMarkup = new Menu().InlineMenu(ChatId);
+                    sendMessage(ChatId, "INLINE Меню", replyMarkup);
                     return;
 
                 default:
@@ -39,14 +37,15 @@ namespace TelegrammBotApi
             //отправка сообщения пользователю
             sendMessage(ChatId, answer);
         }
+        #endregion
 
-
+        #region Отправка сообщения
         /// <summary>
         /// Метод, для отправки текстового сообщения
         /// </summary>
         /// <param name="chat_id">ID чата</param>
         /// <param name="text">Текст отправляемого сообщения</param>
-         async void sendMessage(string chat_id, string text, string replyMarkup = "")
+        async void sendMessage(string chat_id, string text, string replyMarkup = "")
         {
             string url = $"{Settings.Url}sendMessage";
             string data = $"chat_id={chat_id}&text={text}";
@@ -58,55 +57,7 @@ namespace TelegrammBotApi
             var res = await Settings.Client.PostAsync(url, content);
 
         }
+        #endregion
 
-
-
-
-
-
-        //List<List<InlineKeyboardButton>> keybort = new List<List<InlineKeyboardButton>>();
-        //создаем линии из кнопок
-        //List<InlineKeyboardButton> Line2 = new List<InlineKeyboardButton>();
-
-        /// <summary>
-        /// Создаем Inline меню
-        /// </summary>
-        /// <param name="ChatId"></param>
-        string InlineMenu(string ChatId)
-        {
-
-            
-            //создаем кнопку 1
-            InlineKeyboardButton key1 = new InlineKeyboardButton("кнопка 1", "ya.ru","адрес перенаправления");
-            //создаем кнопку 2
-            InlineKeyboardButton key2 = new InlineKeyboardButton("кнопка 2", "Отобразится данное сообщение");
-
-            //Создаем 1 линию(строку) из кнопок
-            List<InlineKeyboardButton> keyBtn = new List<InlineKeyboardButton>()
-            {
-                key1,
-                key2
-            };
-            
-
-            //Создаем все кнопки
-            List<List<InlineKeyboardButton>> keybort = new List<List<InlineKeyboardButton>>()
-            {
-                keyBtn,
-                keyBtn,
-                keyBtn,
-            };
-
-            InlineKeyboardMarkup allBtn = new InlineKeyboardMarkup(keybort);
-
-
-            //необходимо сериализовать класс в JSON
-            string replyMarkup = JsonConvert.SerializeObject(allBtn);
-            //отправка сообщения 
-            sendMessage(ChatId, "INLINE Меню", replyMarkup);
-
-            return replyMarkup;
-        }
-
-    }
-}
+    }//class Messages
+}//namespace TelegrammBotApi
