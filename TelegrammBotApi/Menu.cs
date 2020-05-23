@@ -39,6 +39,39 @@ namespace TelegrammBotApi
             string replyMarkup = JsonConvert.SerializeObject(allBtn);
             return replyMarkup;
         }
-        #endregion 
-    }
-}
+        #endregion
+
+
+
+        #region Кнопочное меню
+        List<List<string>> CreateMenu()
+        {
+
+            //Создаем ВСЮ клавиатуру
+            List<List<string>> keybord = new List<List<string>>()
+            {
+                 new List<string>(){"Первый ряд - кн1", "Первый ряд - кн2"},
+                 new List<string>(){"Второй ряд - кн3"},
+                 new List<string>(){"Третий ряд - кн4", "Третий ряд - кн5", "Третий ряд - кн6"},
+            };
+            return keybord;
+
+        }
+
+        /// <summary>
+        /// Меню кнопок
+        /// </summary>
+        /// <param name="ChatId"></param>
+        public string MyMenu()
+        {
+
+            ButtonMenu btn = new ButtonMenu(CreateMenu());
+            //необходимо сериализовать класс в JSON
+            string replyMarkup = JsonConvert.SerializeObject(btn);
+
+            return replyMarkup;
+
+        }
+        #endregion
+    }//class Menu
+}//namespace TelegrammBotApi

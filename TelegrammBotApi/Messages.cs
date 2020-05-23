@@ -29,6 +29,13 @@ namespace TelegrammBotApi
                     sendMessage(ChatId, "INLINE Меню", replyMarkup);
                     return;
 
+
+                case @"/меню":
+                    string ReplyMarkup = new Menu().MyMenu();
+                    sendMessage(ChatId, "Кнопочное Меню", ReplyMarkup);
+                    return;
+
+
                 default:
                     answer = $"Вы мне написали:\r\n{Message}\r\nЯ не знаю что ответить, воспользуйтесь командой: /menu";
                     break;

@@ -86,5 +86,34 @@ namespace TelegrammBotApi
         }
         #endregion
 
+
+        /// <summary>Класс создания кнопочного меню </summary>
+        public class ButtonMenu
+        {
+            /// <summary>
+            ///Набор кнопок
+            /// </summary>
+            public List<List<string>> keyboard { get; set; }
+            /// <summary>
+            /// скрывать клавиатуру
+            /// </summary>
+            public bool one_time_keyboard { get; set; }
+
+            /// <summary>
+            /// Конструктор, Создаем список кнопок
+            /// </summary>
+            /// <param name="keyboard">Лист с наборами кнопок</param>
+            /// <param name="one_time_keyboard">Скрывать клавиатуру?</param>
+            public ButtonMenu(List<List<string>> keyboard, bool one_time_keyboard = true)
+            {
+
+                this.keyboard = keyboard;
+                this.one_time_keyboard = one_time_keyboard;
+
+            }
+
+        }
+
+
     }//class Buttons
 }//namespace TelegrammBotApi
