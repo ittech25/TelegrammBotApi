@@ -16,13 +16,13 @@ namespace TelegrammBotApi
             //создаем кнопку 1
             InlineKeyboardButton key1 = new InlineKeyboardButton("кнопка 1", "ya.ru", "адрес перенаправления");
             //создаем кнопку 2
-            InlineKeyboardButton key2 = new InlineKeyboardButton("кнопка 2", "Отобразится данное сообщение");
+            InlineKeyboardButton key2 = new InlineKeyboardButton("Меню", "Кнопочное меню");
 
             //Создаем 1 линию(строку) из кнопок
             List<InlineKeyboardButton> keyBtn = new List<InlineKeyboardButton>()
             {
                 key1,
-                key2
+                key2,
             };
 
 

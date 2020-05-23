@@ -27,13 +27,18 @@ namespace TelegrammBotApi
                 case @"/menu":
                     string replyMarkup = new Menu().InlineMenu(ChatId);
                     sendMessage(ChatId, "INLINE Меню", replyMarkup);
+                    
                     return;
 
 
-                case @"/меню":
+                case @"кнопочное меню":
                     string ReplyMarkup = new Menu().MyMenu();
                     sendMessage(ChatId, "Кнопочное Меню", ReplyMarkup);
+
                     return;
+
+                    
+
 
 
                 default:
@@ -47,14 +52,17 @@ namespace TelegrammBotApi
         #endregion
 
 
-
+        #region Обработка запросов от Inline кнопки
         /// <summary>
         /// Обработка входящено сообщения через Callback
         /// </summary>
         /// <param name="result"></param>
         internal void MsgCallback(JsonMessages.Result result, string replyMarkup = "")
         {
+            //Получаем текст который нужно обработать
             string text = result.callback_query.data;
+            //Получаем chatId
+            string chatId = result.callback_query.message.chat.id.ToString();
 
             Console.BackgroundColor = ConsoleColor.Red;
             Console.WriteLine($"{result.callback_query.id} --> {text}");
@@ -62,11 +70,42 @@ namespace TelegrammBotApi
 
             //отправка всплывающей подсказки
             answerCallbackQuery(result, result.callback_query.message.text);
-            //editMessageText(result, replyMarkup);
+            
+            //Вызываем метод для обработки нашего текста
+            //ProcessMessage(chatId, text);
+
+            //Правка сообщения
+            editMessageText(result, replyMarkup);
         }
+        #endregion
 
 
 
+        /// <summary>
+        /// Правка сообщений (реализовал пока только для Сallback)
+        /// </summary>
+        /// <param name="result"></param>
+        /// <param name="replyMarkup"> введите replyMarkup</param>
+        async void editMessageText(JsonMessages.Result result, string replyMarkup = "")
+        {
+            //https://core.telegram.org/bots/api#editmessagetext
+
+            string text = result.callback_query.data;
+            string url = $@"{Settings.Url}editMessageText";
+
+            //текст text.UrlEncode() нужно кодировать
+
+            string data = $"chat_id={result.callback_query.message.chat.id.ToString()}&text={text}&message_id={result.callback_query.message.message_id.ToString()}";
+
+            if (replyMarkup != "") data = data + $"&reply_markup={replyMarkup}";
+
+            StringContent content = new StringContent(data, Encoding.UTF8, "application/x-www-form-urlencoded");
+
+            var res = await Settings.Client.PostAsync(url, content);
+
+
+
+        }
 
 
 
