@@ -39,6 +39,30 @@ namespace TelegrammBotApi
         }
         #endregion
 
+
+
+        /// <summary>
+        /// Обработка входящено сообщения через Callback
+        /// </summary>
+        /// <param name="result"></param>
+        internal void MsgCallback(JsonMessages.Result result, string replyMarkup = "")
+        {
+            string text = result.callback_query.data;
+
+            Console.BackgroundColor = ConsoleColor.Red;
+            Console.WriteLine($"{result.callback_query.id} --> {text}");
+            Console.ResetColor();
+
+            //отправка всплывающей подсказки
+            answerCallbackQuery(result, result.callback_query.message.text);
+            //editMessageText(result, replyMarkup);
+        }
+
+
+
+
+
+
         #region Отправка сообщения
         /// <summary>
         /// Метод, для отправки текстового сообщения
@@ -58,6 +82,31 @@ namespace TelegrammBotApi
 
         }
         #endregion
+
+        #region Отправка всплывающей подсказки
+        /// <summary>
+        ///  Метод, для отправки всплывающей подсказаки для Inline кнопок
+        /// </summary>
+        /// <param name="result"></param>
+        async void answerCallbackQuery(JsonMessages.Result result, string text)
+        {
+            //адрес для запроса
+            string url = $@"{Settings.Url}answerCallbackQuery";
+
+            //текст всплывающей подсказки
+            //string text = result.callback_query.data;
+
+            //передаваемые параметры callback_query_id и text
+            string data = $"callback_query_id={result.callback_query.id}&text={text}";
+
+            StringContent content = new StringContent(data, Encoding.UTF8, "application/x-www-form-urlencoded");
+
+            var res = await Settings.Client.PostAsync(url, content);
+
+        }
+        #endregion
+
+
 
     }//class Messages
 }//namespace TelegrammBotApi

@@ -9,13 +9,9 @@ namespace TelegrammBotApi
     internal class Modes
     {
         
-        
         //Порядковый номер сообщения
         long countUpdateId = 0;
 
-        
-        
-        
         /// <summary>
         /// Конструктор 
         /// </summary>
@@ -23,9 +19,9 @@ namespace TelegrammBotApi
         public Modes(string token)
         {
             string baseUrl = "https://api.telegram.org/bot";
-            string Url = baseUrl + token + "/";
+            Settings.Url = baseUrl + token + "/";
 
-            Settings.Url = Url;
+            
 
             //Устанавливаем прокси
             InitProxy();
@@ -68,7 +64,7 @@ namespace TelegrammBotApi
             /*
              * На данный момент 2 типа сообщений
              * 1 - el.message - обработка простых кнопок и сообщений
-             * 2 - el.callback_query - обработка сообщений от Inline кнопок
+             * 2 - el.callback_query - обработка запроса от Inline кнопок
              * Взависимости от типа сообщения обрабатываем его
              */
             foreach (var el in MessageNew.result)
@@ -80,6 +76,7 @@ namespace TelegrammBotApi
                 if (el.message != null)
                 {
                     Console.WriteLine("Обработка сообщения 1 способом");
+                    //Обрабатываем текстовое сообщение от пользователя или от кнопочного меню
                     new Messages().ProcessMessage(el.message.chat.id.ToString(), el.message.text);
                 }
 
@@ -89,7 +86,10 @@ namespace TelegrammBotApi
                     Console.WriteLine("Обработка INLINE сообщений - 2 способ");
                     //получаем ChatId
                     string ChatId = el.callback_query.message.chat.id.ToString();
-                   
+                    //получаем replyMarkup
+                    string replyMarkup = new Menu().InlineMenu(ChatId);
+                    //обрабатываем запрос от Inline кнопок
+                    new Messages().MsgCallback(el, replyMarkup);
                 }
             }
             countUpdateId++;

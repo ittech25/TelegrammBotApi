@@ -13,8 +13,6 @@ namespace TelegrammBotApi
         /// <param name="ChatId"></param>
         public string InlineMenu(string ChatId)
         {
-
-
             //создаем кнопку 1
             InlineKeyboardButton key1 = new InlineKeyboardButton("кнопка 1", "ya.ru", "адрес перенаправления");
             //создаем кнопку 2
