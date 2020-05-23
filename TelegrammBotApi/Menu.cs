@@ -30,6 +30,20 @@ namespace TelegrammBotApi
             List<List<InlineKeyboardButton>> keybort = new List<List<InlineKeyboardButton>>()
             {
                 keyBtn,
+
+                //2 линия состоящая из кнопок
+                new List<InlineKeyboardButton>()
+                {
+                    new InlineKeyboardButton("кнопка1", "линия 2 - кнопка1"),
+                    new InlineKeyboardButton("кнопка2", "линия 2 - кнопка2"),
+                    new InlineKeyboardButton("кнопка3", "линия 2 - кнопка3"),
+                },
+                 //3 линия состоящая из кнопок
+                new List<InlineKeyboardButton>()
+                {
+                    new InlineKeyboardButton("кнопка4", "линия 3 - кнопка4"),
+      
+                }
             };
 
             InlineKeyboardMarkup allBtn = new InlineKeyboardMarkup(keybort);
@@ -40,8 +54,6 @@ namespace TelegrammBotApi
             return replyMarkup;
         }
         #endregion
-
-
 
         #region Кнопочное меню
         List<List<string>> CreateMenu()

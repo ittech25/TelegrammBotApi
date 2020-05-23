@@ -70,7 +70,7 @@ namespace TelegrammBotApi
 
             //отправка всплывающей подсказки
             answerCallbackQuery(result, result.callback_query.message.text);
-            
+
             //Вызываем метод для обработки нашего текста
             //ProcessMessage(chatId, text);
 
@@ -80,7 +80,7 @@ namespace TelegrammBotApi
         #endregion
 
 
-
+        #region Правка сообщений от Inline запросов
         /// <summary>
         /// Правка сообщений (реализовал пока только для Сallback)
         /// </summary>
@@ -106,7 +106,7 @@ namespace TelegrammBotApi
 
 
         }
-
+        #endregion
 
 
         #region Отправка сообщения
