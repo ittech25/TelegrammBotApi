@@ -1,11 +1,16 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using TelegrammBotApi.SQL;
 using static TelegrammBotApi.Buttons;
 
 namespace TelegrammBotApi
 {
     public class Menu
     {
+        List<List<InlineKeyboardButton>> keybort = new List<List<InlineKeyboardButton>>();
+        //создаем линии из кнопок
+        List<InlineKeyboardButton> line = new List<InlineKeyboardButton>();
+
         #region Создаем Inline Меню
         /// <summary>
         /// Создаем Inline меню
@@ -13,32 +18,20 @@ namespace TelegrammBotApi
         /// <param name="ChatId"></param>
         public string InlineMenu(string ChatId)
         {
-            //создаем кнопку 1
-            InlineKeyboardButton key1 = new InlineKeyboardButton("кнопка 1", "ya.ru", "адрес перенаправления");
-            //создаем кнопку 2
-            InlineKeyboardButton key2 = new InlineKeyboardButton("Меню", "Кнопочное меню");
-
-            //Создаем 1 линию(строку) из кнопок
-            List<InlineKeyboardButton> keyBtn = new List<InlineKeyboardButton>()
-            {
-                key1,
-                key2,
-            };
 
 
             //Создаем все кнопки
             List<List<InlineKeyboardButton>> keybort = new List<List<InlineKeyboardButton>>()
             {
-                keyBtn,
 
-                //2 линия состоящая из кнопок
+                //1 линия состоящая из кнопок
                 new List<InlineKeyboardButton>()
                 {
                     new InlineKeyboardButton("кнопка1", "линия 2 - кнопка1"),
                     new InlineKeyboardButton("кнопка2", "линия 2 - кнопка2"),
                     new InlineKeyboardButton("кнопка3", "линия 2 - кнопка3"),
                 },
-                 //3 линия состоящая из кнопок
+                //2 линия состоящая из кнопок
                 new List<InlineKeyboardButton>()
                 {
                     new InlineKeyboardButton("кнопка4", "линия 3 - кнопка4"),
@@ -54,6 +47,65 @@ namespace TelegrammBotApi
             return replyMarkup;
         }
         #endregion
+
+
+
+
+        /// <summary>
+        /// Добавляем кнопку в InlineMenu
+        /// </summary>
+        /// <param name="ChatId"></param>
+        /// <param name="nameButton"> имя кнопки</param>
+        /// <param name="lineBtn">линия кнопки</param>
+        /// <returns></returns>
+        public string InlineMenuAddButton (string ChatId, string nameButton, string callback_data, int lineBtn)
+        {
+
+            Buttons.InlineKeyboardMarkup allBtn = new Buttons.InlineKeyboardMarkup();
+
+            allBtn.AddButton
+                (new InlineKeyboardButton(nameButton, callback_data));
+
+            
+
+            //необходимо сериализовать класс в JSON
+            string replyMarkup = JsonConvert.SerializeObject(allBtn);
+            return replyMarkup;
+
+
+            
+        }
+
+        /// <summary>
+        /// Меню из БД
+        /// </summary>
+        /// <param name="ChatId"></param>
+        /// <returns></returns>
+        public string InlineMenuFromBd(string ChatId)
+        {
+            Buttons.InlineKeyboardMarkup allBtn = new Buttons.InlineKeyboardMarkup();
+            IEnumerable<string> res = new RequestBd().GetCategory();
+            int a = 0;
+            foreach(string el in res)
+                //Добавляем кнопку в следующий столбец
+                allBtn.AddButton(new InlineKeyboardButton($"{el}", $"{el}"), ++a/4);
+            ButtonHeaderMenu(allBtn);
+            return JsonConvert.SerializeObject(allBtn);
+        }
+
+        /// <summary>
+        /// Метод, добавляет главные кнопки в меню
+        /// </summary>
+        /// <param name="keybort"></param>
+        public void ButtonHeaderMenu(InlineKeyboardMarkup keybort)
+        {
+            List<InlineKeyboardButton> line = new List<InlineKeyboardButton>()
+            {
+                 new InlineKeyboardButton("Есть вопрос?","?"),
+                 new InlineKeyboardButton("О нас?","abbout"),
+            };
+            keybort.AddLineButton(line);
+        }
 
         #region Кнопочное меню
         List<List<string>> CreateMenu()

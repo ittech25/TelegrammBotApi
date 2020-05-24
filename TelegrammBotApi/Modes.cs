@@ -86,8 +86,9 @@ namespace TelegrammBotApi
                     Console.WriteLine("Обработка INLINE сообщений - 2 способ");
                     //получаем ChatId
                     string ChatId = el.callback_query.message.chat.id.ToString();
+                    
                     //получаем replyMarkup
-                    string replyMarkup = new Menu().InlineMenu(ChatId);
+                    string replyMarkup = new Menu().InlineMenuFromBd(ChatId);
                     //обрабатываем запрос от Inline кнопок
                     new Messages().MsgCallback(el, replyMarkup);
                 }

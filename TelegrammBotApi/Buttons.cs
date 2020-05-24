@@ -5,7 +5,7 @@ namespace TelegrammBotApi
     /// <summary>
     /// Класс для создания кнопок
     /// </summary>
-    class Buttons
+    public class Buttons
     {
         #region Процесс создания Inline кнопок
         /// <summary>
@@ -24,7 +24,45 @@ namespace TelegrammBotApi
             public InlineKeyboardMarkup(List<List<InlineKeyboardButton>> inline_keyboard)
             {
                 this.inline_keyboard = inline_keyboard;
+            }
 
+            public InlineKeyboardMarkup()
+            {
+                this.inline_keyboard = new List<List<InlineKeyboardButton>>();
+            }
+
+            /// <summary>
+            /// Метод, добавление кнопки в Меню
+            /// </summary>
+            /// <param name="Button">Массив кнопки</param>
+            public void AddButton(InlineKeyboardButton Button)
+            {
+                this.inline_keyboard.Add(new List<InlineKeyboardButton> { Button });
+            }
+
+            /// <summary>
+            /// Метод, добавление кнопки в указанную строку
+            /// </summary>
+            /// <param name="Button"></param>
+            /// <param name="NumberLine">номер строки для добавления кнопки</param>
+            public void AddButton(InlineKeyboardButton Button, int NumberLine)
+            {
+                while (this.inline_keyboard.Count <= NumberLine)
+                {
+                    this.inline_keyboard.Add(new List<InlineKeyboardButton>());
+                }
+                this.inline_keyboard[NumberLine].Add(Button);
+            }
+
+
+
+            /// <summary>
+            /// Метод, добавление линий у кнопок
+            /// </summary>
+            /// <param name="LineList">массив линий из кнопок</param>
+            public void AddLineButton(List<InlineKeyboardButton> LineList)
+            {
+                this.inline_keyboard.Add(LineList);
             }
 
 
@@ -87,6 +125,7 @@ namespace TelegrammBotApi
         #endregion
 
 
+        #region Кнопочное меню
         /// <summary>Класс создания кнопочного меню </summary>
         public class ButtonMenu
         {
@@ -113,7 +152,7 @@ namespace TelegrammBotApi
             }
 
         }
-
+        #endregion
 
     }//class Buttons
 }//namespace TelegrammBotApi

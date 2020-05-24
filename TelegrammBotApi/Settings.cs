@@ -1,4 +1,6 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Net.Http;
+using static TelegrammBotApi.Buttons;
 
 namespace TelegrammBotApi
 {
@@ -13,5 +15,14 @@ namespace TelegrammBotApi
 
         /// <summary> Базовый Url для запроса к Api</summary>
         public static string Url { get; set; }
+
+
+
+        /// <summary> Создание кнопок</summary>
+       // public static List<List<InlineKeyboardButton>> Keybort { get; set; }
+        /// <summary> Создание линий из кнопок</summary>
+        //public static List<InlineKeyboardButton> Line { get; set; }
+
+       
     }
 }

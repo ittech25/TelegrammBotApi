@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using TelegrammBotApi.SQL;
 
 namespace TelegrammBotApi
 {
@@ -27,9 +29,13 @@ namespace TelegrammBotApi
                 case @"/menu":
                     string replyMarkup = new Menu().InlineMenu(ChatId);
                     sendMessage(ChatId, "INLINE Меню", replyMarkup);
-                    
                     return;
 
+                case @"/createmenu":
+
+                    sendMessage(ChatId, "Категории товаров", new Menu().InlineMenuFromBd(ChatId));
+                    
+                        return;
 
                 case @"кнопочное меню":
                     string ReplyMarkup = new Menu().MyMenu();
