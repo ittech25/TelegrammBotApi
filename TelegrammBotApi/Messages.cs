@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Web;
 using TelegrammBotApi.SQL;
 
 namespace TelegrammBotApi
@@ -27,25 +28,16 @@ namespace TelegrammBotApi
                     break;
 
                 case @"/menu":
-                    string replyMarkup = new Menu().InlineMenu(ChatId);
-                    sendMessage(ChatId, "INLINE Меню", replyMarkup);
+                    string replyMarkup = "";
+                    string text = new Menu().InlineMenuFromBd(out replyMarkup);
+                    sendMessage(ChatId, text, replyMarkup);
                     return;
+              
 
-                case @"/createmenu":
-
-                    sendMessage(ChatId, "Категории товаров", new Menu().InlineMenuFromBd(ChatId));
-                    
-                        return;
-
-                case @"кнопочное меню":
+                case @"/кнопочное меню":
                     string ReplyMarkup = new Menu().MyMenu();
                     sendMessage(ChatId, "Кнопочное Меню", ReplyMarkup);
-
                     return;
-
-                    
-
-
 
                 default:
                     answer = $"Вы мне написали:\r\n{Message}\r\nЯ не знаю что ответить, воспользуйтесь командой: /menu";
@@ -57,36 +49,51 @@ namespace TelegrammBotApi
         }
         #endregion
 
-
         #region Обработка запросов от Inline кнопки
         /// <summary>
-        /// Обработка входящено сообщения через Callback
+        /// Обработка запросов от Inline кнопки
         /// </summary>
-        /// <param name="result"></param>
-        internal void MsgCallback(JsonMessages.Result result, string replyMarkup = "")
+        /// <param name="result">Результат от запроса JsonMessages.Result</param>
+        /// <param name="replyMarkup"></param>
+        internal void ProcessMessageToInline(JsonMessages.Result result, string replyMarkup="")
         {
-            //Получаем текст который нужно обработать
-            string text = result.callback_query.data;
-            //Получаем chatId
+            //получаем chatId - идентификатор чата
             string chatId = result.callback_query.message.chat.id.ToString();
+            //получаем message_id - идентификатор сообщения
+            string messageId = result.callback_query.message.message_id.ToString();
+            //получаем текст от callback_query
+            string messageCallback = result.callback_query.data;
+            
+            //получаем название кнопки
+            string titleButton = result.callback_query.message.text;
 
-            Console.BackgroundColor = ConsoleColor.Red;
-            Console.WriteLine($"{result.callback_query.id} --> {text}");
-            Console.ResetColor();
+            
+            string answer = String.Empty; //ответ входящее на сообщение
+            
+            //обработка сообщения полученого от Inline кнопки от callback_query
+            switch (messageCallback.ToLower())
+            {
+                case @"?":
+                    titleButton = messageCallback;
+                    new Menu().InlineMenuFromBd(out replyMarkup);
+                    break;
 
-            //отправка всплывающей подсказки
-            answerCallbackQuery(result, result.callback_query.message.text);
+                default:
+                    answer = new Menu().InlineMenuFromBd(out replyMarkup);
+                    break;
+            }
 
-            //Вызываем метод для обработки нашего текста
-            //ProcessMessage(chatId, text);
+            titleButton = answer + Environment.NewLine + messageCallback;
+            //отправка сообщения пользователю
+            //sendMessage(chatId, answer, replyMarkup); ;
 
-            //Правка сообщения
-            editMessageText(result, replyMarkup);
+
+            editMessageText(chatId, messageId, titleButton, replyMarkup);
         }
         #endregion
 
 
-        #region Правка сообщений от Inline запросов
+        #region Правка сообщений от Inline запросов - 1
         /// <summary>
         /// Правка сообщений (реализовал пока только для Сallback)
         /// </summary>
@@ -100,7 +107,7 @@ namespace TelegrammBotApi
             string url = $@"{Settings.Url}editMessageText";
 
             //текст text.UrlEncode() нужно кодировать
-
+            
             string data = $"chat_id={result.callback_query.message.chat.id.ToString()}&text={text}&message_id={result.callback_query.message.message_id.ToString()}";
 
             if (replyMarkup != "") data = data + $"&reply_markup={replyMarkup}";
@@ -109,11 +116,30 @@ namespace TelegrammBotApi
 
             var res = await Settings.Client.PostAsync(url, content);
 
+        }
+        #endregion
+        #region Правка сообщений от Inline запросов - 2
+        /// <summary>
+        ///Метод, Правки сообщения
+        /// </summary>
+        /// <param name="chatId">введите chatId</param>
+        /// <param name="messageId">введите идентификатор сообщения messageId</param>
+        /// <param name="text">введите текст изменяемого сообщения</param>
+        /// <param name="replyMarkup">введите replyMarkup</param>  
+        async void editMessageText(string chatId, string messageId,string text, string replyMarkup = "")
+        {
+            string url = $@"{Settings.Url}editMessageText";
 
+            string data = $"chat_id={chatId}&text={text}&message_id={messageId}";
+
+            if (replyMarkup != "") data = data + $"&reply_markup={replyMarkup}";
+
+            StringContent content = new StringContent(data, Encoding.UTF8, "application/x-www-form-urlencoded");
+
+            var res = await Settings.Client.PostAsync(url, content);
 
         }
         #endregion
-
 
         #region Отправка сообщения
         /// <summary>

@@ -7,10 +7,6 @@ namespace TelegrammBotApi
 {
     public class Menu
     {
-        List<List<InlineKeyboardButton>> keybort = new List<List<InlineKeyboardButton>>();
-        //создаем линии из кнопок
-        List<InlineKeyboardButton> line = new List<InlineKeyboardButton>();
-
         #region Создаем Inline Меню
         /// <summary>
         /// Создаем Inline меню
@@ -48,9 +44,7 @@ namespace TelegrammBotApi
         }
         #endregion
 
-
-
-
+        #region Добавление Inline кнопок в меню
         /// <summary>
         /// Добавляем кнопку в InlineMenu
         /// </summary>
@@ -66,8 +60,6 @@ namespace TelegrammBotApi
             allBtn.AddButton
                 (new InlineKeyboardButton(nameButton, callback_data));
 
-            
-
             //необходимо сериализовать класс в JSON
             string replyMarkup = JsonConvert.SerializeObject(allBtn);
             return replyMarkup;
@@ -75,13 +67,15 @@ namespace TelegrammBotApi
 
             
         }
+        #endregion
 
+        #region Создаем Inline Меню из БД (наименование категории)
         /// <summary>
         /// Меню из БД
         /// </summary>
         /// <param name="ChatId"></param>
         /// <returns></returns>
-        public string InlineMenuFromBd(string ChatId)
+        public string InlineMenuFromBd(out string replyMarkup)
         {
             Buttons.InlineKeyboardMarkup allBtn = new Buttons.InlineKeyboardMarkup();
             IEnumerable<string> res = new RequestBd().GetCategory();
@@ -90,9 +84,12 @@ namespace TelegrammBotApi
                 //Добавляем кнопку в следующий столбец
                 allBtn.AddButton(new InlineKeyboardButton($"{el}", $"{el}"), ++a/4);
             ButtonHeaderMenu(allBtn);
-            return JsonConvert.SerializeObject(allBtn);
+            replyMarkup =  JsonConvert.SerializeObject(allBtn);
+            return "Категории продуктов";
         }
+        #endregion
 
+        #region Метод для добавления Главных Inline кнопок в Меню
         /// <summary>
         /// Метод, добавляет главные кнопки в меню
         /// </summary>
@@ -101,11 +98,13 @@ namespace TelegrammBotApi
         {
             List<InlineKeyboardButton> line = new List<InlineKeyboardButton>()
             {
-                 new InlineKeyboardButton("Есть вопрос?","?"),
+                 new InlineKeyboardButton("Есть вопросы?","?"),
                  new InlineKeyboardButton("О нас?","abbout"),
             };
             keybort.AddLineButton(line);
         }
+        #endregion
+
 
         #region Кнопочное меню
         List<List<string>> CreateMenu()
@@ -137,5 +136,6 @@ namespace TelegrammBotApi
 
         }
         #endregion
+
     }//class Menu
 }//namespace TelegrammBotApi

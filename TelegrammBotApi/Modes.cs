@@ -8,7 +8,6 @@ namespace TelegrammBotApi
 {
     internal class Modes
     {
-        
         //Порядковый номер сообщения
         long countUpdateId = 0;
 
@@ -54,24 +53,26 @@ namespace TelegrammBotApi
             //Серилизация объекта
             JsonMessages.Finish MessageNew = JsonConvert.DeserializeObject<JsonMessages.Finish>(res.ToString());
 
+            //Проверка на пустоту и на статус
             if (!MessageNew.ok || MessageNew.result.Length == 0) return;
 
             //Получаем порядковый номер сообщения
             countUpdateId = MessageNew.result[0].update_id;
-            
 
-            //перебор входящих сообщений
+
             /*
              * На данный момент 2 типа сообщений
              * 1 - el.message - обработка простых кнопок и сообщений
              * 2 - el.callback_query - обработка запроса от Inline кнопок
              * Взависимости от типа сообщения обрабатываем его
              */
+            //перебор входящих сообщений и выбор режима обработки сообщения
             foreach (var el in MessageNew.result)
             {
                 //Получаем порядковый номер сообщения
                 countUpdateId = el.update_id;
 
+                #region Обрабытываем Текстовые сообщения и Кнопочное меню
                 //Проверка на получение текстового сообщения или кнопочного меню
                 if (el.message != null)
                 {
@@ -79,20 +80,22 @@ namespace TelegrammBotApi
                     //Обрабатываем текстовое сообщение от пользователя или от кнопочного меню
                     new Messages().ProcessMessage(el.message.chat.id.ToString(), el.message.text);
                 }
+                #endregion
 
+                #region Обрабытываем Inline запросы
                 //Проверка на получение сообщения от Inline кнопок
                 if (el.callback_query != null)
                 {
                     Console.WriteLine("Обработка INLINE сообщений - 2 способ");
                     //получаем ChatId
                     string ChatId = el.callback_query.message.chat.id.ToString();
-                    
-                    //получаем replyMarkup
-                    string replyMarkup = new Menu().InlineMenuFromBd(ChatId);
-                    //обрабатываем запрос от Inline кнопок
-                    new Messages().MsgCallback(el, replyMarkup);
+
+                    //Функция, для обработки Inline запроса
+                    new Messages().ProcessMessageToInline(el);
                 }
+                #endregion
             }
+
             countUpdateId++;
 
             // Пауза для получения новых сообщений

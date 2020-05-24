@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace TelegrammBotApi.SQL
+﻿namespace TelegrammBotApi.SQL
 {
+    /// <summary>
+    /// Структура из БД
+    /// </summary>
     public class StructureBd
     {
         //id, name, description, price

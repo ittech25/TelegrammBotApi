@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 
 namespace TelegrammBotApi.SQL
 {
@@ -28,7 +26,10 @@ namespace TelegrammBotApi.SQL
             }
         }
 
-
+        /// <summary>
+        /// Получаем категории из БД
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<string> GetCategory()
         {
 
