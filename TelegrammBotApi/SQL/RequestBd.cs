@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
+using System.Text;
 
 namespace TelegrammBotApi.SQL
 {
-    /// <summary>Класс, запросов к БД </summary>
     public class RequestBd
     {
 
@@ -26,8 +28,6 @@ namespace TelegrammBotApi.SQL
             }
         }
 
-
-
         public IEnumerable<string> GetCategory()
         {
 
@@ -45,12 +45,10 @@ namespace TelegrammBotApi.SQL
         }
 
 
-        /// <summary>
-        /// Получаем название продуктов по категории
-        /// </summary>
-        /// <param name="Category">название категории</param>
-        /// <returns></returns>
-        public List<string> GetProductsFromCategory(string Category)
+
+
+
+        public IEnumerable<string> GetProductsFromCategory(string Category)
         {
             /*
             SELECT  name
@@ -73,21 +71,23 @@ namespace TelegrammBotApi.SQL
                     Categorys,                          //второй список, который соединяем с текущим
                     products => products.CategorysId,   //свойство объекта из текущего списка, по которому идет соединение
                     categorys => categorys.id,          //свойство объекта из второго списка, по которому идет соединение
-                    (products, categorys)              //новый объект, который получается в результате соединения
-                    => products.name.ToList();                  // результат
+                    (products, categorys)               //новый объект, который получается в результате соединения
+                    => products.name);                  // результат
                 */
                 #endregion
 
-                var res =
+                return
                         from products in Products
                         join categorys in Categorys
                         on products.CategorysId equals categorys.id
                         where categorys.catName == Category
                         select products.name;
-                return res.ToList();
 
             }
 
         }
+
+
+
     }//class RequestBd
-}
+}//namespace ConsoleTest.SQL

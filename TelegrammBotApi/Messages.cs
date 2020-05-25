@@ -32,7 +32,14 @@ namespace TelegrammBotApi
                     string text = new Menu().InlineMenuFromBd(out replyMarkup);
                     sendMessage(ChatId, text, replyMarkup);
                     return;
-              
+
+
+                case @"/menu1":
+                   
+                    string text1 = new Menu().InlineMenu();
+                    sendMessage(ChatId, "Меню", text1);
+                    return;
+
 
                 case @"/кнопочное меню":
                     string ReplyMarkup = new Menu().MyMenu();
@@ -85,7 +92,7 @@ namespace TelegrammBotApi
 
                 case @"супы":
                     titleButton = messageCallback;
-                    new Menu().InlineMenuProductsFromCategory("Cупы",out replyMarkup);
+                    new Menu().InlineMenuProductsFromCategory("Супы", out replyMarkup);
                     break;
 
                 default:

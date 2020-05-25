@@ -1,5 +1,6 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace TelegrammBotApi.SQL
 {
@@ -15,7 +16,6 @@ namespace TelegrammBotApi.SQL
         public string description { get; set; }
         public double price { get; set; }
 
-       
         public virtual StructureBdCategorys Categorys { get; set; }
     }
 

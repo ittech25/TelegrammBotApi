@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using TelegrammBotApi.SQL;
 
-namespace TelegrammBotApi.SQL
+namespace TelegrammBotApi
 {
     /// <summary>
     /// Класс, подключающийся к БД 

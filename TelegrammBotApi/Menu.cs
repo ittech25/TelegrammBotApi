@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Reflection.Metadata;
 using TelegrammBotApi.SQL;
@@ -44,7 +45,7 @@ namespace TelegrammBotApi
         /// Создаем Inline меню
         /// </summary>
         /// <param name="ChatId"></param>
-        public string InlineMenu(string ChatId)
+        public string InlineMenu()
         {
 
 
@@ -111,12 +112,22 @@ namespace TelegrammBotApi
         {
             Buttons.InlineKeyboardMarkup allBtn = new Buttons.InlineKeyboardMarkup();
             IEnumerable<string> res = new RequestBd().GetCategory();
+
+            //string query = "SELECT catName FROM categorys";
+            //var res = new Bd().SelectBD(query);
+            //res.Split(new String[] { "\r\n" }, StringSplitOptions.None)
+
             int a = 0;
-            foreach(string el in res)
+            foreach (string el in res)
+            {
+                if (el == "") continue;
                 //Добавляем кнопку в следующий столбец
-                allBtn.AddButton(new InlineKeyboardButton($"{el}", $"{el}"), ++a/4);
+                allBtn.AddButton(new InlineKeyboardButton($"{el}", $"{el}"), ++a / 4);
+               
+            }
+
             ButtonHeaderMenu(allBtn);
-            replyMarkup =  JsonConvert.SerializeObject(allBtn);
+             replyMarkup =  JsonConvert.SerializeObject(allBtn);
             return "Категории продуктов";
         }
         #endregion
@@ -140,13 +151,17 @@ namespace TelegrammBotApi
 
         public string InlineMenuProductsFromCategory(string Category,out string replyMarkup)
         {
+            IEnumerable<string> res = new RequestBd().GetProductsFromCategory(Category);
             Buttons.InlineKeyboardMarkup allBtn = new Buttons.InlineKeyboardMarkup();
-            var res =  new RequestBd().GetProductsFromCategory(Category);
-            
+            //string query = $"SELECT name FROM products INNER JOIN categorys ON products.CategorysId = categorys.id WHERE categorys.catName='{Category.ToLower()}';";
+            //var res =  new Bd().SelectBD(query);
             int a = 0;
             foreach (string el in res)
+            {
+                if (el == "") continue;
                 //Добавляем кнопку в следующий столбец
                 allBtn.AddButton(new InlineKeyboardButton($"{el}", $"{el}"), ++a / 4);
+            }
             ButtonHeaderMenu(allBtn);
             replyMarkup = JsonConvert.SerializeObject(allBtn);
             return Category;

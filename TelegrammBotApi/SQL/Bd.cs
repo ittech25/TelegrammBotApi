@@ -96,7 +96,7 @@ namespace TelegrammBotApi.SQL
                     sbRes.AppendLine(sb.ToString().TrimEnd('|'));
                     sb.Clear();
                 }
-                return sbRes.ToString().TrimEnd('\r', '\n');
+                return sbRes.ToString();
 
 
             }
