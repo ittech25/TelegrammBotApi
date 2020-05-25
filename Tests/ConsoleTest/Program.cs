@@ -15,9 +15,14 @@ namespace ConsoleTest
 
         static void Main(string[] args)
         {
-            IEnumerable<string> res = new RequestBd().GetCategory();
-            Console.WriteLine(res.GetType());
-            System.Console.WriteLine(string.Join(Environment.NewLine, res));
+            //IEnumerable<string> res = new RequestBd().GetCategory();
+
+            var res = new RequestBd().CountProducts();
+            Console.WriteLine(res);
+
+            var res1 = new RequestBd().GetCategory();
+
+            System.Console.WriteLine(string.Join(Environment.NewLine, res1));
             Console.ReadKey();
         }
     }

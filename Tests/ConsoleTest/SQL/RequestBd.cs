@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace ConsoleTest.SQL
@@ -19,7 +20,7 @@ namespace ConsoleTest.SQL
             using (ApplicationContext db = new ApplicationContext())
             {
                 //Формируем БД в виде объектов
-                List<StructureBd> sql = db.product.ToList();
+                List<StructureBdProducts> sql = db.products.ToList();
 
                 var res = from n in sql
                           select sql.Count();
@@ -27,8 +28,8 @@ namespace ConsoleTest.SQL
             }
         }
 
-
-
+        
+        
         public IEnumerable<string> GetCategory()
         {
 
@@ -36,13 +37,15 @@ namespace ConsoleTest.SQL
             using (ApplicationContext db = new ApplicationContext())
             {
                 //Формируем БД в виде объектов
-                List<StructureBd> sql = db.product.ToList();
+                List<StructureBdCategorys> sql = db.categorys.ToList();
+                var res =  sql.Select(x => x.catName);
 
-                return sql.Select(x => x.category).Distinct();
+                return res;
                 
             }
+            
         }
-
+        
 
     }//class RequestBd
 }//namespace ConsoleTest.SQL

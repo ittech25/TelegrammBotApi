@@ -11,11 +11,12 @@ namespace TelegrammBotApi.SQL
         /// Указываем структуру таблицы из БД 
         /// (Важно! Наименование должно совпадать с Таблицей из БД) 
         /// </summary>
-        public DbSet<StructureBd> product { get; set; }
-
+        public DbSet<StructureBdProducts> products { get; set; }
+        public DbSet<StructureBdCategorys> categorys { get; set; }
         public ApplicationContext()
         {
             Database.EnsureCreated();
+            //Database.Migrate();
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

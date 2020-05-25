@@ -98,8 +98,8 @@ namespace TelegrammBotApi
         {
             List<InlineKeyboardButton> line = new List<InlineKeyboardButton>()
             {
-                 new InlineKeyboardButton("Есть вопросы?","?"),
-                 new InlineKeyboardButton("О нас?","abbout"),
+                 new InlineKeyboardButton("Есть вопросы?","help"),
+                 new InlineKeyboardButton("О нас?","about"),
             };
             keybort.AddLineButton(line);
         }

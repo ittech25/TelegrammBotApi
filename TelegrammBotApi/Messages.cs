@@ -73,8 +73,13 @@ namespace TelegrammBotApi
             //обработка сообщения полученого от Inline кнопки от callback_query
             switch (messageCallback.ToLower())
             {
-                case @"?":
+                case @"help":
                     titleButton = messageCallback;
+                    new Menu().InlineMenuFromBd(out replyMarkup);
+                    break;
+
+                case @"about":
+                    answer = "Тут будет описание компании";
                     new Menu().InlineMenuFromBd(out replyMarkup);
                     break;
 
