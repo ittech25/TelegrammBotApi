@@ -17,13 +17,23 @@ namespace ConsoleTest
         {
             //IEnumerable<string> res = new RequestBd().GetCategory();
 
-            var res = new RequestBd().CountProducts();
-            Console.WriteLine(res);
+            for (int a = 0; a < 5; a++)
+            {
 
-            var res1 = new RequestBd().GetCategory();
+                var res = new RequestBd().GetProductsFromCategory("Супы");
+                System.Console.WriteLine(string.Join(Environment.NewLine, res));
+            }
+        
 
-            System.Console.WriteLine(string.Join(Environment.NewLine, res1));
+
+            //System.Console.WriteLine(string.Join(Environment.NewLine, res));
             Console.ReadKey();
+
+
+
+
         }
+
     }
+
 }

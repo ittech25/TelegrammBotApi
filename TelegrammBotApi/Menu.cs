@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Reflection.Metadata;
 using TelegrammBotApi.SQL;
 using static TelegrammBotApi.Buttons;
 
@@ -7,6 +8,37 @@ namespace TelegrammBotApi
 {
     public class Menu
     {
+        #region Кнопочное меню
+        List<List<string>> CreateMenu()
+        {
+
+            //Создаем ВСЮ клавиатуру
+            List<List<string>> keybord = new List<List<string>>()
+            {
+                 new List<string>(){"Первый ряд - кн1", "Первый ряд - кн2"},
+                 new List<string>(){"Второй ряд - кн3"},
+                 new List<string>(){"Третий ряд - кн4", "Третий ряд - кн5", "Третий ряд - кн6"},
+            };
+            return keybord;
+
+        }
+
+        /// <summary>
+        /// Меню кнопок
+        /// </summary>
+        /// <param name="ChatId"></param>
+        public string MyMenu()
+        {
+
+            ButtonMenu btn = new ButtonMenu(CreateMenu());
+            //необходимо сериализовать класс в JSON
+            string replyMarkup = JsonConvert.SerializeObject(btn);
+
+            return replyMarkup;
+
+        }
+        #endregion
+
         #region Создаем Inline Меню
         /// <summary>
         /// Создаем Inline меню
@@ -106,36 +138,19 @@ namespace TelegrammBotApi
         #endregion
 
 
-        #region Кнопочное меню
-        List<List<string>> CreateMenu()
+        public string InlineMenuProductsFromCategory(string Category,out string replyMarkup)
         {
-
-            //Создаем ВСЮ клавиатуру
-            List<List<string>> keybord = new List<List<string>>()
-            {
-                 new List<string>(){"Первый ряд - кн1", "Первый ряд - кн2"},
-                 new List<string>(){"Второй ряд - кн3"},
-                 new List<string>(){"Третий ряд - кн4", "Третий ряд - кн5", "Третий ряд - кн6"},
-            };
-            return keybord;
-
+            Buttons.InlineKeyboardMarkup allBtn = new Buttons.InlineKeyboardMarkup();
+            var res =  new RequestBd().GetProductsFromCategory(Category);
+            
+            int a = 0;
+            foreach (string el in res)
+                //Добавляем кнопку в следующий столбец
+                allBtn.AddButton(new InlineKeyboardButton($"{el}", $"{el}"), ++a / 4);
+            ButtonHeaderMenu(allBtn);
+            replyMarkup = JsonConvert.SerializeObject(allBtn);
+            return Category;
         }
-
-        /// <summary>
-        /// Меню кнопок
-        /// </summary>
-        /// <param name="ChatId"></param>
-        public string MyMenu()
-        {
-
-            ButtonMenu btn = new ButtonMenu(CreateMenu());
-            //необходимо сериализовать класс в JSON
-            string replyMarkup = JsonConvert.SerializeObject(btn);
-
-            return replyMarkup;
-
-        }
-        #endregion
 
     }//class Menu
 }//namespace TelegrammBotApi

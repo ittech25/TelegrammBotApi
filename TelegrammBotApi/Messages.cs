@@ -79,16 +79,21 @@ namespace TelegrammBotApi
                     break;
 
                 case @"about":
-                    answer = "Тут будет описание компании";
+                    titleButton = "Тут будет описание компании";
                     new Menu().InlineMenuFromBd(out replyMarkup);
                     break;
 
+                case @"супы":
+                    titleButton = messageCallback;
+                    new Menu().InlineMenuProductsFromCategory("Cупы",out replyMarkup);
+                    break;
+
                 default:
-                    answer = new Menu().InlineMenuFromBd(out replyMarkup);
+                    titleButton = new Menu().InlineMenuFromBd(out replyMarkup);
                     break;
             }
 
-            titleButton = answer + Environment.NewLine + messageCallback;
+            //titleButton = answer + Environment.NewLine + messageCallback;
             //отправка сообщения пользователю
             //sendMessage(chatId, answer, replyMarkup); ;
 

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using TelegrammBotApi.SQL;
 
 namespace TelegrammBotApi
 {
@@ -19,8 +21,11 @@ namespace TelegrammBotApi
             //Токен от бота Tellegram
             Settings.Token = "392463607:AAH2MyFC5A0PUPD0JFfwYILTErdtn45Civ8";
             //Запускаем бота в работу
-            Modes mod = new Modes(Settings.Token);
- 
+             Modes mod = new Modes(Settings.Token);
+
+
+            //IEnumerable<string> res = new RequestBd().GetProductsFromCategory("Супы");
+           // Console.WriteLine(String.Join(Environment.NewLine, res));
         }
 
     }
