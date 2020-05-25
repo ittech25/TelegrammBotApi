@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
+using Microsoft.EntityFrameworkCore;
 using System.Text;
 
 namespace ConsoleTest.SQL
@@ -88,6 +88,33 @@ namespace ConsoleTest.SQL
         }
 
 
+        /// <summary>
+        ///Получаем данные о товаре
+        /// </summary>
+        /// <param name="NameProduct">имя товара</param>
+        /// <returns></returns>
+        public IEnumerable<string> GetProducts(string NameProduct)
+        {
+            //подключаемся к БД - kinopoisk
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                //SELECT id, name, description, price FROM products WHERE NAME = 'Рисовая'
+                //Формируем БД в виде объектов
+                List<StructureBdCategorys> Categorys = db.categorys.ToList();
+                List<StructureBdProducts> Products = db.products.ToList();
+
+                //Метод Join() принимает четыре параметра:
+                return Products.Where(p => p.name == "Рисовая").Join(
+                    Categorys,                          //второй список, который соединяем с текущим
+                    products => products.CategorysId,   //свойство объекта из текущего списка, по которому идет соединение
+                    categorys => categorys.id,          //свойство объекта из второго списка, по которому идет соединение
+                    (products, categorys)               //новый объект, который получается в результате соединения
+                    => $"Категория товара: {categorys.catName}\r\nПродукт:{products.name}\n\n" +
+                       $"Описание:\n\t{products.description}\n\n\t\tЦена: {products.price}.00 руб.");                  // результат
+
+
+            }
+        }
 
     }//class RequestBd
 }//namespace ConsoleTest.SQL

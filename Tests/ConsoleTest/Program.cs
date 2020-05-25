@@ -15,15 +15,15 @@ namespace ConsoleTest
 
         static void Main(string[] args)
         {
-            //IEnumerable<string> res = new RequestBd().GetCategory();
-            string x = "";
-            for (int a = 0; a < 5; a++)
-            {
+            var res = new RequestBd().GetProducts();
+           
+          Console.WriteLine(string.Join(Environment.NewLine, res));
 
-                var res = new RequestBd().GetProductsFromCategory("Супы");
-                System.Console.WriteLine(string.Join(Environment.NewLine, res));
+            foreach (var el in res)
+            {
+                Console.WriteLine(el);
+            
             }
-        
 
 
             //System.Console.WriteLine(string.Join(Environment.NewLine, res));

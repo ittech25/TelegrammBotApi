@@ -1,6 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.EntityFrameworkCore.Internal;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection.Metadata;
 using TelegrammBotApi.SQL;
 using static TelegrammBotApi.Buttons;
@@ -148,13 +150,41 @@ namespace TelegrammBotApi
         }
         #endregion
 
-
+        /// <summary>
+        /// Получаем Меню продуктов из категории
+        /// </summary>
+        /// <param name="Category">Наименование категории</param>
+        /// <param name="replyMarkup"></param>
+        /// <returns></returns>
         public string InlineMenuProductsFromCategory(string Category,out string replyMarkup)
         {
+            //Получаем продукты из БД по категории
             IEnumerable<string> res = new RequestBd().GetProductsFromCategory(Category);
+
+            //проверка на наличие какого-либо значения в коллекции
+            //если кол-ция не пустая то
+            if (res.Any()) 
+            {
+                //получаем Меню Продуктов из Категории
+                replyMarkup = AddButtonFromBd(res);
+                return Category;
+            }
+
+            replyMarkup = AddButtonFromBd(res);
+            //Делаем новый запрос в БД и получаем Данные о товаре
+            return new RequestBd().GetProducts(Category);
+            
+           
+        }
+        /// <summary>
+        /// Создаем кнопки из БД
+        /// </summary>
+        /// <param name="res">Запрос полученный от БД в виде IEnumerable<string></param>
+        /// <returns>возвращаем replyMarkup </returns>
+        string AddButtonFromBd(IEnumerable<string> res)
+        {
             Buttons.InlineKeyboardMarkup allBtn = new Buttons.InlineKeyboardMarkup();
-            //string query = $"SELECT name FROM products INNER JOIN categorys ON products.CategorysId = categorys.id WHERE categorys.catName='{Category.ToLower()}';";
-            //var res =  new Bd().SelectBD(query);
+
             int a = 0;
             foreach (string el in res)
             {
@@ -162,10 +192,12 @@ namespace TelegrammBotApi
                 //Добавляем кнопку в следующий столбец
                 allBtn.AddButton(new InlineKeyboardButton($"{el}", $"{el}"), ++a / 4);
             }
-            ButtonHeaderMenu(allBtn);
-            replyMarkup = JsonConvert.SerializeObject(allBtn);
-            return Category;
+            
+            ButtonHeaderMenu(allBtn); //Добавляем главные кнопки в меню
+            string replyMarkup = JsonConvert.SerializeObject(allBtn);
+            return replyMarkup;
         }
+
 
     }//class Menu
 }//namespace TelegrammBotApi

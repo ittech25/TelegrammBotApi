@@ -47,7 +47,11 @@ namespace TelegrammBotApi.SQL
 
 
 
-
+        /// <summary>
+        /// Получаем продукты в указанной категории из БД
+        /// </summary>
+        /// <param name="Category">Укажите категорию</param>
+        /// <returns></returns>
         public IEnumerable<string> GetProductsFromCategory(string Category)
         {
             /*
@@ -88,6 +92,33 @@ namespace TelegrammBotApi.SQL
         }
 
 
+        /// <summary>
+        ///Получаем данные о товаре
+        /// </summary>
+        /// <param name="NameProduct">имя товара</param>
+        /// <returns></returns>
+        public string GetProducts(string NameProduct)
+        {
+            //подключаемся к БД - kinopoisk
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                //SELECT id, name, description, price FROM products WHERE NAME = 'Рисовая'
+                //Формируем БД в виде объектов
+                List<StructureBdCategorys> Categorys = db.categorys.ToList();
+                List<StructureBdProducts> Products = db.products.ToList();
+
+                //Метод Join() принимает четыре параметра:
+                return Products.Where(p => p.name == NameProduct).Join(
+                    Categorys,                          //второй список, который соединяем с текущим
+                    products => products.CategorysId,   //свойство объекта из текущего списка, по которому идет соединение
+                    categorys => categorys.id,          //свойство объекта из второго списка, по которому идет соединение
+                    (products, categorys)               //новый объект, который получается в результате соединения
+                    => $"Категория товара: {categorys.catName}\r\nПродукт:{products.name}\n\n" +
+                       $"Описание:\n\t{products.description}\n\n\t\tЦена: {products.price}.00 руб.").FirstOrDefault();                  // результат
+
+
+            }
+        }
 
     }//class RequestBd
 }//namespace ConsoleTest.SQL

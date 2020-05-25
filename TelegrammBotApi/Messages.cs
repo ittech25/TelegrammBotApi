@@ -33,14 +33,6 @@ namespace TelegrammBotApi
                     sendMessage(ChatId, text, replyMarkup);
                     return;
 
-
-                case @"/menu1":
-                   
-                    string text1 = new Menu().InlineMenu();
-                    sendMessage(ChatId, "Меню", text1);
-                    return;
-
-
                 case @"/кнопочное меню":
                     string ReplyMarkup = new Menu().MyMenu();
                     sendMessage(ChatId, "Кнопочное Меню", ReplyMarkup);
@@ -81,7 +73,7 @@ namespace TelegrammBotApi
             switch (messageCallback.ToLower())
             {
                 case @"help":
-                    titleButton = messageCallback;
+                    titleButton = "Спаравка по продуктам";
                     new Menu().InlineMenuFromBd(out replyMarkup);
                     break;
 
@@ -90,13 +82,13 @@ namespace TelegrammBotApi
                     new Menu().InlineMenuFromBd(out replyMarkup);
                     break;
 
-                case @"супы":
-                    titleButton = messageCallback;
-                    new Menu().InlineMenuProductsFromCategory("Супы", out replyMarkup);
-                    break;
-
+           
                 default:
-                    titleButton = new Menu().InlineMenuFromBd(out replyMarkup);
+                    titleButton = messageCallback;
+                    var res = new Menu().InlineMenuProductsFromCategory(messageCallback, out replyMarkup);
+
+                    //если ответ выдал больше 30 символов, значит это не категория и не товар, а описание товара
+                    if (res.Length > 30) titleButton = res;
                     break;
             }
 
