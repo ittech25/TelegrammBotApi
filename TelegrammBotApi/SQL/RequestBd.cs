@@ -64,6 +64,7 @@ namespace TelegrammBotApi.SQL
             //подключаемся к БД - kinopoisk
             using (ApplicationContext db = new ApplicationContext())
             {
+                
                 //Формируем БД в виде объектов
                 List<StructureBdCategorys> Categorys = db.categorys.ToList();
                 List<StructureBdProducts> Products = db.products.ToList();

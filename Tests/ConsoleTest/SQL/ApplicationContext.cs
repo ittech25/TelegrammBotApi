@@ -13,10 +13,12 @@ namespace ConsoleTest.SQL
         /// </summary>
         public DbSet<StructureBdProducts> products { get; set; }
         public DbSet<StructureBdCategorys> categorys { get; set; }
+        public DbSet<StructureBdCart> cart { get; set; }
+
         public ApplicationContext()
         {
             Database.EnsureCreated();
-            //Database.Migrate();
+            
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

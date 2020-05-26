@@ -12,7 +12,7 @@ namespace TelegrammBotApi
             Console.WriteLine("Старт шаблона!");
             #region Справка
             /*
-             * Официальная документация - https://core.telegram.org/
+             * Официальная документация - https://core.telegram.org/bots/api
              * Частичная документация на русском - https://tlgrm.ru/docs/bots/api
              * Как создать бота - https://tlgrm.ru/docs/bots#kak-sozdat-bota
              */

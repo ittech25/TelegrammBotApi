@@ -15,18 +15,19 @@ namespace ConsoleTest
 
         static void Main(string[] args)
         {
+            Console.WriteLine("Старт шаблона");
             //var res = new RequestBd().GetProducts();
-           
-          //Console.WriteLine(string.Join(Environment.NewLine, res));
 
-          //  foreach (var el in res)
-          //  {
-          //      Console.WriteLine(el);
-            
-          //  }
+        
+            Console.WriteLine(string.Join(Environment.NewLine, new SqlProductData(new ApplicationContext()).GetProductById("Беговые дорожки")));
 
+            //DbInitializer ini = new DbInitializer(new ApplicationContext());
+            //ini.Initialize();
+
+            // Console.WriteLine(string.Join(Environment.NewLine, new RequestBd().CountProducts()));
 
             //System.Console.WriteLine(string.Join(Environment.NewLine, res));
+            Console.WriteLine("Завершон шаблона");
             Console.ReadKey();
 
 
