@@ -87,7 +87,7 @@ namespace TelegrammBotApi
         /// <param name="nameButton"> имя кнопки</param>
         /// <param name="lineBtn">линия кнопки</param>
         /// <returns></returns>
-        public string InlineMenuAddButton (string ChatId, string nameButton, string callback_data, int lineBtn)
+        public string InlineMenuAddButton (string nameButton, string callback_data)
         {
 
             Buttons.InlineKeyboardMarkup allBtn = new Buttons.InlineKeyboardMarkup();
@@ -151,6 +151,23 @@ namespace TelegrammBotApi
         #endregion
 
         /// <summary>
+        /// Метод, добавляет кнопки навигации
+        /// </summary>
+        /// <param name="keybort"></param>
+        public InlineKeyboardMarkup ButtonNavigation(InlineKeyboardMarkup keybort)
+        {
+            List<InlineKeyboardButton> line = new List<InlineKeyboardButton>()
+            {
+                 new InlineKeyboardButton("Назад","about"),
+                 
+            };
+            keybort.AddLineButton(line);
+            return keybort;
+        }
+
+
+
+        /// <summary>
         /// Получаем Меню продуктов из категории
         /// </summary>
         /// <param name="Category">Наименование категории</param>
@@ -162,20 +179,31 @@ namespace TelegrammBotApi
             IEnumerable<string> res = new RequestBd().GetProductsFromCategory(Category);
 
             //проверка на наличие какого-либо значения в коллекции
-            //если кол-ция не пустая то
+            //если коллекция не пустая, то
             if (res.Any()) 
             {
                 //получаем Меню Продуктов из Категории
                 replyMarkup = AddButtonFromBd(res);
                 return Category;
             }
+            //если категорию не нашли(коллекция пустая) то
+            string catName = "";
 
-            replyMarkup = AddButtonFromBd(res);
-            //Делаем новый запрос в БД и получаем Данные о товаре
-            return new RequestBd().GetProducts(Category);
             
-           
+            //Делаем новый запрос в БД и получаем Данные о товаре (описание товара)
+            string text =  new RequestBd().GetProducts(Category,out catName);
+            //делаем запрос для получения МЕНЮ товаров из категории
+            res = new RequestBd().GetProductsFromCategory(catName);
+
+            var listbtn = AddButtonReturnInlineKeyboardMarkup(res); //добавили кнопки из БД - вернули кнопоки для сериализации
+            listbtn.AddButton(new InlineKeyboardButton($"Назад", $"about"));
+            
+            replyMarkup = JsonConvert.SerializeObject(listbtn);
+
+
+            return text;
         }
+        
         /// <summary>
         /// Создаем кнопки из БД
         /// </summary>
@@ -198,6 +226,40 @@ namespace TelegrammBotApi
             return replyMarkup;
         }
 
+        /// <summary>
+        /// Кнопки, полученные из списка
+        /// Важно! Необходимо потом их будет серилизовать:
+        /// string replyMarkup = JsonConvert.SerializeObject(список)
+        /// </summary>
+        /// <param name="res">Список кнопок, которой необходимо добавить IEnumerable<string></param>
+        /// <param column="res">Максимальное кол-во столбцов в меню (по умолчанию =4)</param>
+        /// <returns></returns>
+        InlineKeyboardMarkup AddButtonReturnInlineKeyboardMarkup(IEnumerable<string> res, int column=4)
+        {
+            Buttons.InlineKeyboardMarkup allBtn = new Buttons.InlineKeyboardMarkup();
+
+            int a = 0;
+            foreach (string el in res)
+            {
+                if (el == "") continue;
+                //Добавляем кнопку в следующий столбец
+                allBtn.AddButton(new InlineKeyboardButton($"{el}", $"{el}"), ++a / column);
+            }
+
+            ButtonHeaderMenu(allBtn); //Добавляем главные кнопки в меню
+            
+            
+
+            return allBtn;
+        }
+
+
+        string ReplyMarkup(InlineKeyboardMarkup ListButtons)
+        {
+            string replyMarkup = JsonConvert.SerializeObject(ListButtons);
+            return replyMarkup;
+
+        }
 
     }//class Menu
 }//namespace TelegrammBotApi

@@ -93,13 +93,15 @@ namespace TelegrammBotApi.SQL
 
 
         /// <summary>
-        ///Получаем данные о товаре
+        /// Получаем данные о товаре(описание)
         /// </summary>
-        /// <param name="NameProduct">имя товара</param>
-        /// <returns></returns>
-        public string GetProducts(string NameProduct)
+        /// <param name="NameProduct">Наименование товара</param>
+        /// <param name="catName">возвращает Категорию данного товара</param>
+        /// <returns>вернет Описание товара и категорию</returns>
+        public string GetProducts(string NameProduct, out string catName)
         {
-            //подключаемся к БД - kinopoisk
+            string categoryName = String.Empty;
+            //подключаемся к БД
             using (ApplicationContext db = new ApplicationContext())
             {
                 //SELECT id, name, description, price FROM products WHERE NAME = 'Рисовая'
@@ -108,15 +110,16 @@ namespace TelegrammBotApi.SQL
                 List<StructureBdProducts> Products = db.products.ToList();
 
                 //Метод Join() принимает четыре параметра:
-                return Products.Where(p => p.name == NameProduct).Join(
+                var res =  Products.Where(p => p.name == NameProduct).Join(
                     Categorys,                          //второй список, который соединяем с текущим
                     products => products.CategorysId,   //свойство объекта из текущего списка, по которому идет соединение
                     categorys => categorys.id,          //свойство объекта из второго списка, по которому идет соединение
                     (products, categorys)               //новый объект, который получается в результате соединения
-                    => $"Категория товара: {categorys.catName}\r\nПродукт:{products.name}\n\n" +
+                    => $"Категория товара: {categoryName = categorys.catName}\r\nПродукт:{products.name}\n\n" +
                        $"Описание:\n\t{products.description}\n\n\t\tЦена: {products.price}.00 руб.").FirstOrDefault();                  // результат
 
-
+                catName = categoryName;
+                return res;
             }
         }
 
