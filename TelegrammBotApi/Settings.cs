@@ -17,12 +17,13 @@ namespace TelegrammBotApi
         public static string Url { get; set; }
 
 
+        public static int Number { get; set; }
 
         /// <summary> Создание кнопок</summary>
-       // public static List<List<InlineKeyboardButton>> Keybort { get; set; }
+        // public static List<List<InlineKeyboardButton>> Keybort { get; set; }
         /// <summary> Создание линий из кнопок</summary>
         //public static List<InlineKeyboardButton> Line { get; set; }
 
-       
+
     }
 }

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using System.Text;
 
 namespace ConsoleTest.SQL
 {
+    [System.Runtime.InteropServices.Guid("5297F4DD-C3AF-46F9-82A7-A2BB30E1A161")]
     public class RequestBd
     {
 
@@ -36,19 +36,19 @@ namespace ConsoleTest.SQL
             {
                 //Формируем БД в виде объектов
                 List<StructureBdCategorys> sql = db.categorys.ToList();
-                var res =  sql.Select(x => x.catName);
+                var res = sql.Select(x => x.catName);
 
                 return res;
-                
+
             }
-            
+
         }
 
 
 
 
 
-        public IEnumerable<string> GetProductsFromCategory(string Category)
+        public IEnumerable<string> GetProductsFromCategory(string Category,int SkipNomer =0, int TakeNomer=0)
         {
             /*
             SELECT  name
@@ -76,12 +76,16 @@ namespace ConsoleTest.SQL
                 */
                 #endregion
 
-                return
+                var res =
                         from products in Products
                         join categorys in Categorys
                         on products.CategorysId equals categorys.id
                         where categorys.catName == Category
                         select products.name;
+
+                if (TakeNomer == 0) TakeNomer = res.Count();
+
+                return res.ToList().Skip(SkipNomer).Select(p => p = GetString(p, 62)).Take(TakeNomer);
 
             }
 
@@ -114,6 +118,31 @@ namespace ConsoleTest.SQL
 
 
             }
+        }
+
+        /// <summary>
+        /// Получаем текст с заданной длиной байтов.
+        /// В теллеграмме ограничение в 64 байта для заголовков
+        /// </summary>
+        /// <param name="text">текст</param>
+        /// <param name="sizeArrMax">максимальный размер байтов(по умл. = 62)</param>
+        /// <returns></returns>
+        public string GetString(string text, int sizeArrMax = 62)
+        {
+            string newString = String.Empty;
+            //выбираем кодировку
+            Encoding u8 = Encoding.UTF8;
+
+            //кодируем 
+            byte[] bytes = u8.GetBytes(text);
+            //получаем размер
+            int sizeArr = u8.GetByteCount(text);
+
+            if (sizeArr <= sizeArrMax)
+                newString = u8.GetString(bytes, 0, sizeArr);
+            else
+                newString = u8.GetString(bytes, 0, sizeArrMax);
+            return newString;
         }
 
     }//class RequestBd

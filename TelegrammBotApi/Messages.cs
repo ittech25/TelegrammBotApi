@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Web;
@@ -29,7 +30,7 @@ namespace TelegrammBotApi
 
                 case @"/menu":
                     string replyMarkup = "";
-                    string text = new Menu().InlineMenuFromBd(out replyMarkup);
+                    string text = new Menu().InlineMenuFromBd(out replyMarkup,2);
                     sendMessage(ChatId, text, replyMarkup);
                     return;
 
@@ -82,13 +83,22 @@ namespace TelegrammBotApi
                     new Menu().InlineMenuFromBd(out replyMarkup);
                     break;
 
-           
+                case @"next":
+                    titleButton = messageCallback;
+                    Settings.Number = Settings.Number + 5;
+                    new Menu().InlineMenuProductsFromCategory(messageCallback, out replyMarkup);
+                    
+                    break;
+
+
                 default:
                     titleButton = messageCallback;
                     var res = new Menu().InlineMenuProductsFromCategory(messageCallback, out replyMarkup);
 
+                    //проверка на NULL
+                    if (String.IsNullOrEmpty(res)) break;
                     //если ответ выдал больше 30 символов, значит это не категория и не товар, а описание товара
-                    if (res.Length > 30) titleButton = res;
+                    if (res.Length > 30 || !res.Any()) titleButton = res;
                     break;
             }
 

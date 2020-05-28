@@ -18,9 +18,9 @@ namespace ConsoleTest.SQL
         //   .AsEnumerable();
 
 
-        public StructureBdProducts GetProductById(string name) => _db.products
-       .Include(p => p.CategorysId)
-       .Include(p => p.id)
-       .FirstOrDefault(p => p. == 5);
+       // public StructureBdProducts GetProductById(string name) => _db.products
+       //.Include(p => p.CategorysId)
+       //.Include(p => p.id)
+       //.FirstOrDefault(p => p. == 5);
     }
 }

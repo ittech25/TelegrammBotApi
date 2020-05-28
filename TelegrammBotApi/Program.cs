@@ -17,6 +17,7 @@ namespace TelegrammBotApi
              * Как создать бота - https://tlgrm.ru/docs/bots#kak-sozdat-bota
              */
             #endregion
+            Settings.Number = 0;
 
             //Токен от бота Tellegram
             Settings.Token = "392463607:AAH2MyFC5A0PUPD0JFfwYILTErdtn45Civ8";
