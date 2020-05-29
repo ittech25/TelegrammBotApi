@@ -144,5 +144,35 @@ namespace TelegrammBotApi.SQL
 
 
 
+
+
+
+
+        public IEnumerable<string> GetProductsToCart(string UserName)
+        {
+            string categoryName = String.Empty;
+            //подключаемся к БД
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                //SELECT id, name, description, price FROM products WHERE NAME = 'Рисовая'
+                //Формируем БД в виде объектов
+                List<StructureBdCategorys> Categorys = db.categorys.ToList();
+                List<StructureBdProducts> Products = db.products.ToList();
+                List<StructureBdCart> Cart = db.cart.ToList();
+
+
+                //SELECT id, user_name, productId FROM cart WHERE user_name = 123
+
+                //Метод Join() принимает четыре параметра:
+                var res = Cart.Where(c => c.user_name == UserName).Select(c => c.productId.ToString());  // результат
+                return res;
+            }
+        }
+
+
+
+
+
+
     }//class RequestBd
 }//namespace ConsoleTest.SQL
