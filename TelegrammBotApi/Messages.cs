@@ -67,7 +67,9 @@ namespace TelegrammBotApi
             //получаем название кнопки
             string titleButton = result.callback_query.message.text;
 
-            
+            string userName = result.callback_query.message.from.username;
+
+
             string answer = String.Empty; //ответ входящее на сообщение
             
             //обработка сообщения полученого от Inline кнопки от callback_query
@@ -87,7 +89,12 @@ namespace TelegrammBotApi
                     titleButton = messageCallback;
                     Settings.Number = Settings.Number + 5;
                     new Menu().InlineMenuProductsFromCategory(messageCallback, out replyMarkup);
-                    
+                    break;
+
+
+                case @"корзина":
+                    titleButton =                  
+                    new Menu().MenuCart(userName, out replyMarkup);
                     break;
 
 

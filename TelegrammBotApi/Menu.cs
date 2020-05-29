@@ -146,6 +146,12 @@ namespace TelegrammBotApi
                  new InlineKeyboardButton("О нас?","about"),
             };
             keybort.AddLineButton(line);
+            List<InlineKeyboardButton> line2 = new List<InlineKeyboardButton>()
+            {
+                
+                 new InlineKeyboardButton("Корзина","корзина"),
+            };
+            keybort.AddLineButton(line2);
         }
         #endregion
 
@@ -284,6 +290,24 @@ namespace TelegrammBotApi
         }
 
 
+
+        public string MenuCart(string UserName,out string replyMarkup)
+        {
+            
+            Cart cart = new Cart(UserName);
+
+            Buttons.InlineKeyboardMarkup allBtn = new Buttons.InlineKeyboardMarkup();
+            List<InlineKeyboardButton> line = new List<InlineKeyboardButton>()
+            {
+                 
+                 new InlineKeyboardButton("Назад","about"),
+            };
+            allBtn.AddLineButton(line);
+            ButtonHeaderMenu(allBtn);
+            replyMarkup = JsonConvert.SerializeObject(allBtn);
+            return $"В корзине {cart.CountProductsToCart.ToString()} шт.";
+           
+        }
 
 
     }//class Menu
