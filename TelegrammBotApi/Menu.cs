@@ -163,7 +163,7 @@ namespace TelegrammBotApi
                  new InlineKeyboardButton("<<--","back"),
 
                 
-                new InlineKeyboardButton(number,number),
+                new InlineKeyboardButton(Settings.Number.ToString(),number),
 
                  new InlineKeyboardButton("-->>","next"),
 

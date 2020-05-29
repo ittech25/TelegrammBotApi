@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
 namespace TelegrammBotApi.SQL
 {
@@ -21,6 +19,8 @@ namespace TelegrammBotApi.SQL
         public string description { get; set; }
         [Required]
         public double price { get; set; }
+        [MaxLength(150)]
+        public string linkImg { get; set; }
 
         [ForeignKey("CategorysId")]
         public virtual StructureBdCategorys Categorys { get; set; }
